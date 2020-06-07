@@ -40,7 +40,7 @@ public class ItemAdapter extends RecyclerView.Adapter {
             price = itemView.findViewById(R.id.tvPrice);
             description = itemView.findViewById(R.id.tvDescription);
             purchased = itemView.findViewById(R.id.checkBoxPurchased);
-            purchased.setEnabled(false); // disable the purchased checkbox
+//            purchased.setEnabled(false); // disable the purchased checkbox
             category = itemView.findViewById(R.id.ivCategory);
             edit = itemView.findViewById(R.id.buttonEdit);
             hide = itemView.findViewById(R.id.buttonHide);
@@ -49,13 +49,15 @@ public class ItemAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     if(description.getVisibility()==View.VISIBLE) {
                         description.setVisibility(View.INVISIBLE);
+                        hide.setText("Show Details");
                     } else {
                         description.setVisibility(View.VISIBLE);
+                        hide.setText("Hide Details");
                     }
                 }
             });
             delete = itemView.findViewById(R.id.buttonDelete);
-            itemView.setTag(this);
+//            itemView.setTag(this); // This turned out to be wrong! Tag should be added to the edit button, not the item.
         }
 
         public TextView getNameTV() {
@@ -113,6 +115,7 @@ public class ItemAdapter extends RecyclerView.Adapter {
         } else {
 //            Toast.makeText(parentContext, data.get(position).getCategory(), Toast.LENGTH_SHORT).show();
         }
+        ivh.getEditButton().setTag(holder); // Tag should be added to the edit button!
         ivh.getEditButton().setOnClickListener(onEditClickListener);
         ivh.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override
