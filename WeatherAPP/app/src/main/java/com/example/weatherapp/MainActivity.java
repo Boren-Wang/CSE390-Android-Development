@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
                             Long sunriseTime = Long.parseLong(sys.getString("sunrise"))*1000;
                             Long sunsetTime = Long.parseLong(sys.getString("sunset"))*1000;
 
-                            sunrise.setText(sdf.format(sunriseTime)+" (EDT)");
-                            sunset.setText(sdf.format(sunsetTime)+" (EDT)");
+                            sunrise.setText("Sunrise: "+sdf.format(sunriseTime)+" (EDT)");
+                            sunset.setText("Sunset: "+sdf.format(sunsetTime)+" (EDT)");
 
                             cityName.setVisibility(View.VISIBLE);
                             temperature.setVisibility(View.VISIBLE);
