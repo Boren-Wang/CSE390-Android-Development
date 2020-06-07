@@ -32,7 +32,13 @@ public class ItemDataSource {
             initialValues.put("name", i.getName());
             initialValues.put("price", i.getPrice());
             initialValues.put("description", i.getDescription());
-            initialValues.put("purchased", i.isPurchased());
+            int purchased;
+            if(i.isPurchased()) {
+                purchased = 1;
+            } else {
+                purchased = 0;
+            }
+            initialValues.put("purchased", purchased);
             initialValues.put("category", i.getCategory());
             didSucceed = database.insert("item", null, initialValues) > 0;
         }
@@ -51,7 +57,13 @@ public class ItemDataSource {
             updatedValues.put("name", i.getName());
             updatedValues.put("price", i.getPrice());
             updatedValues.put("description", i.getDescription());
-            updatedValues.put("purchased", i.isPurchased());
+            int purchased;
+            if(i.isPurchased()) {
+                purchased = 1;
+            } else {
+                purchased = 0;
+            }
+            updatedValues.put("purchased", purchased);
             updatedValues.put("category", i.getCategory());
 
             didSucceed = database.update("item", updatedValues, "_id=" + rowId, null) > 0;

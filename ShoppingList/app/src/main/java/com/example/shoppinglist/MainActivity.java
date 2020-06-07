@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements EditDialog.SaveLi
             args.putString("name", item.getName());
             args.putInt("price", item.getPrice());
             args.putString("description", item.getDescription());
-            args.putBoolean("purchase", item.isPurchased());
+            args.putBoolean("purchased", item.isPurchased());
             args.putString("category", item.getCategory());
             FragmentManager fm = getSupportFragmentManager();
             EditDialog editDialog = new EditDialog(MainActivity.this);
@@ -51,36 +51,19 @@ public class MainActivity extends AppCompatActivity implements EditDialog.SaveLi
         initAddButton();
         initSettingButton();
 
-        ItemDataSource ds = new ItemDataSource(this);
-        String sortBy = getSharedPreferences("MyContactListPreferences", Context.MODE_PRIVATE).getString("sortfield", "name");
-        String sortOrder = getSharedPreferences("MyContactListPreferences", Context.MODE_PRIVATE).getString("sortorder", "ASC");
-        try {
-            ds.open();
-            items = ds.getItems(sortBy, sortOrder);
-            ds.close();
-            shoppingList = findViewById(R.id.shoppingList);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-            shoppingList.setLayoutManager(layoutManager);
-            itemAdapter = new ItemAdapter(items, this);
-            itemAdapter.setOnEditClickListener(onEditClickListener);
-            shoppingList.setAdapter(itemAdapter);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "Error retrieving contacts", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        String sortBy = getSharedPreferences("MyContactListPreferences", Context.MODE_PRIVATE).getString("sortfield", "name");
-        String sortOrder = getSharedPreferences("MyContactListPreferences", Context.MODE_PRIVATE).getString("sortorder", "ASC");
+        String sortBy = getSharedPreferences("ShoppingListPreferences", Context.MODE_PRIVATE).getString("sortfield", "name");
+        String sortOrder = getSharedPreferences("ShoppingListPreferences", Context.MODE_PRIVATE).getString("sortorder", "ASC");
 
         ItemDataSource ds = new ItemDataSource(this);
         try {
             ds.open();
-            items = ds.getItems(sortBy, sortOrder);
+            items = ds.getItems(sortBy, sortOrder); // get items from the database
             ds.close();
             shoppingList = findViewById(R.id.shoppingList);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -118,9 +101,13 @@ public class MainActivity extends AppCompatActivity implements EditDialog.SaveLi
     }
 
     @Override
-    public void didFinishEditDialog(Item item) {
+    public void didFinishEditDialog(Item item, Boolean isNewItem) {
 //        Toast.makeText(this, "Did finish EditDialog", Toast.LENGTH_LONG).show();
-        itemAdapter.addItemToData(item);
+        if(isNewItem) {
+            itemAdapter.addItemToData(item);
+        } else {
+            itemAdapter.editItemInData(item);
+        }
         itemAdapter.notifyDataSetChanged();
     }
 }

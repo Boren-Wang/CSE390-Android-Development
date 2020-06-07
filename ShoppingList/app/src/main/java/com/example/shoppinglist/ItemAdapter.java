@@ -25,6 +25,14 @@ public class ItemAdapter extends RecyclerView.Adapter {
         data.add(item);
     }
 
+    public void editItemInData(Item item) {
+        for(int i=0; i<data.size(); i++){
+            if(data.get(i).getItemID()==item.getItemID()){
+                data.set(i, item);
+            }
+        }
+    }
+
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public TextView price;
@@ -103,7 +111,7 @@ public class ItemAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         ItemViewHolder ivh = (ItemViewHolder) holder;
         ivh.getNameTV().setText(data.get(position).getName());
-        ivh.getPriceTV().setText(Integer.toString(data.get(position).getPrice()));
+        ivh.getPriceTV().setText("$"+Integer.toString(data.get(position).getPrice()));
         ivh.getDescriptionTV().setText(data.get(position).getDescription());
         ivh.getPurchasedCB().setChecked(data.get(position).isPurchased());
         if(data.get(position).getCategory().equals("Food")) {

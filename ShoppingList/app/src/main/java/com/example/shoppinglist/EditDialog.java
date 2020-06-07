@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -18,7 +19,7 @@ public class EditDialog extends DialogFragment {
     private Context parentContext;
 
     public interface SaveListener {
-        void didFinishEditDialog(Item item);
+        void didFinishEditDialog(Item item, Boolean isNewItem);
     }
 
     public EditDialog(Context context) {
@@ -34,14 +35,17 @@ public class EditDialog extends DialogFragment {
         final EditText name = (EditText) view.findViewById(R.id.editTextName);
         final EditText price = (EditText) view.findViewById(R.id.editTextPrice);
         final EditText description = (EditText) view.findViewById(R.id.editTextDescription);
-        final CheckBox purchased = (CheckBox) view.findViewById(R.id.checkBoxPurchased);
+        final CheckBox purchased = (CheckBox) view.findViewById(R.id.purchasedEditDialog);
         final Spinner category = (Spinner) view.findViewById(R.id.spinnerCategory);
+//        String[] items= new String[]{"Food","Book","Electronic"};
+//        ArrayAdapter adapter= new ArrayAdapter(parentContext, R.layout.support_simple_spinner_dropdown_item, items);
+//        category.setAdapter(adapter);
         final Button save = (Button) view.findViewById(R.id.buttonSave);
         final Button cancel = (Button) view.findViewById(R.id.buttonCancel);
         Bundle args = getArguments();
         item = new Item();
         if(args!=null) { // if the item is being edited
-            Toast.makeText(parentContext, "The item is being edited!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(parentContext, "The item is being edited!", Toast.LENGTH_SHORT).show();
             item.setItemID(args.getInt("id"));
             item.setName(args.getString("name"));
             item.setPrice(args.getInt("price"));
@@ -57,13 +61,16 @@ public class EditDialog extends DialogFragment {
         purchased.setChecked(item.isPurchased());
         int pos=0;
         String selection = item.getCategory();
-        if(selection=="Food") {
-            pos = 0;
-        } else if(selection=="Book") {
-            pos = 1;
-        } else if(selection=="Electronic") {
-            pos = 2;
+        if(selection!=null) {
+            if(selection.equals("Food")) {
+                pos = 0;
+            } else if(selection.equals("Book")) {
+                pos = 1;
+            } else if(selection.equals("Electronic")) {
+                pos = 2;
+            }
         }
+//        Toast.makeText(parentContext, Integer.toString(pos), Toast.LENGTH_SHORT).show(); // debugging statement
         category.setSelection(pos);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +106,10 @@ public class EditDialog extends DialogFragment {
                 wasSuccessful = ds.insertItem(item);
                 if(wasSuccessful) {
                     Toast.makeText(parentContext, "Insert successfully!", Toast.LENGTH_SHORT).show();
+                    int newId = ds.getLastItemId();
+                    item.setItemID(newId); // change the ID of the item in data so that it will not be mistreated as new item
+                    SaveListener activity = (SaveListener) getActivity();
+                    activity.didFinishEditDialog(item, true);
                 } else {
                     Toast.makeText(parentContext, "Insertion failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -107,13 +118,13 @@ public class EditDialog extends DialogFragment {
                 wasSuccessful= ds.updateItem(item);
                 if(wasSuccessful) {
                     Toast.makeText(parentContext, "Update successfully!", Toast.LENGTH_SHORT).show();
+                    SaveListener activity = (SaveListener) getActivity();
+                    activity.didFinishEditDialog(item, false);
                 } else {
                     Toast.makeText(parentContext, "Update failed!", Toast.LENGTH_SHORT).show();
                 }
             }
             ds.close();
-            SaveListener activity = (SaveListener) getActivity();
-            activity.didFinishEditDialog(item);
             getDialog().dismiss();
         }
         catch (Exception e) {
