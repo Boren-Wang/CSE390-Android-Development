@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+// I got the idea from the chapter 5 & 6 from the textbook
+
 public class ItemAdapter extends RecyclerView.Adapter {
     private ArrayList<Item> data;
     private Context parentContext;

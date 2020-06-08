@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+// I got the idea from the chapter 5 & 6 from the textbook
+
 public class ItemDataSource {
     private SQLiteDatabase database;
     private ItemDBHelper dbHelper;

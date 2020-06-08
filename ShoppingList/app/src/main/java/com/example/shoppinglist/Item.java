@@ -1,5 +1,7 @@
 package com.example.shoppinglist;
 
+// I got the idea from the chapter 5 & 6 from the textbook
+
 public class Item {
     private int itemID;
     private String name;

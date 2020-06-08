@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
+// I got the idea from the chapter 5 & 6 from the textbook
+
 public class MainActivity extends AppCompatActivity implements EditDialog.SaveListener {
     RecyclerView shoppingList;
     ItemAdapter itemAdapter;

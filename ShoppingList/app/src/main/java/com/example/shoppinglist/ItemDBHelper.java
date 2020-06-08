@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+// I got the idea from the chapter 5 & 6 from the textbook
+
 public class ItemDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "shoppinglist.db";
     private static final int DATABASE_VERSION = 1;
